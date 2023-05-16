@@ -12,8 +12,8 @@ public class arrayDemo {
 
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
         int n=Integer.parseInt(br.readLine());
-        arrayDemo1 obj=new arrayDemo1();
-		obj.array1(n);
+        //arrayDemo1 obj=new arrayDemo1();
+		//obj.array1(n);
 
 
     }
