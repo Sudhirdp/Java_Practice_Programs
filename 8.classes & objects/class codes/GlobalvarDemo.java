@@ -12,7 +12,7 @@ class GlobalvarDemo{
 		int a=50;
 		int b=60;
 		//See the byte code, static int y goes in static block ,int x is global so it gets positiion in constructor 
-		// but until the object is not formed ths constructor has no position that means indirectly global variable x has no memory
+		// but until the object is formed the constructor has no position that means indirectly global variable x has no memory
 		
 		
 	}
