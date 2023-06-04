@@ -1,6 +1,6 @@
 //write a java program that checks a number from 0 to 5 and prints its spelling.if the number is greater than 5 print number grater than 5
 
-public class program4 {
+public class Program4 {
     public static void main(String[] args) {
         int num=5;
         if(num<0)

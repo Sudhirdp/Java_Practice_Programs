@@ -1,8 +1,7 @@
 //Write a java program to check if a number is even or odd.
 
 
-public class program1 
-{
+public class Program1 {
     public static void main(String[] args) {
         int num=10;
 

@@ -1,6 +1,6 @@
 //write a java program in which according to month no. print the no.of days in that month
 
-public class program5 {
+public class Program5 {
     public static void main(String[] args) {
         int month=15;
         if(month<0 || month>12)

@@ -2,19 +2,19 @@
 
 class Program10{
 	public static void main(String[] args){
-		float salary=50000.00f;
+		String name="johnn";
 
-		if(salary<=0.00f){
-			System.out.println("Don't go outside.");
+		if(name=="john"){
+			System.out.println("Hello There !! john");
 		}
-		else if(salary>=10000.00f){
-			System.out.println("Go outside, get decent meal.");
+		else if(name=="jack"){
+			System.out.println("Sup !! jack ");
 		}
-		else if(salary>=25000.00f){
-			System.out.println("Dinner in Hotel.");
+		else if(name=="jimmy"){
+			System.out.println("Jimmy ! hey there");
 		}
 		else{
-			System.out.println("Eat at mess");
+			System.out.println("Unknown person");
 		}
 	}
 }

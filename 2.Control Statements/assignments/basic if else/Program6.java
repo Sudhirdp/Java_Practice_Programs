@@ -1,5 +1,5 @@
 //Program to find maximum between three number
-public class program6 {
+public class Program6 {
     public static void main(String[] args) {
         int num1=1;
         int num2=2;
