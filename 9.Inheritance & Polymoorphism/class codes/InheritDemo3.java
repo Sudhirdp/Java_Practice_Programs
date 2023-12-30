@@ -23,7 +23,7 @@ class Child extends Parent{
         System.out.println(x);
         System.out.println(y);
         System.out.println(z);
-        // System.out.println(k);       //not accessible
+        // System.out.println(k);       /not accessible
         //due to inheritance all variables & methods (except private mtehods and variables) of parent are accessible to child class
     }
     static{
