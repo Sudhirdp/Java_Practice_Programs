@@ -1,0 +1,500 @@
+// Multi-threading 
+// here are two threads 
+// both treads work simultaneously according to there priority given by the JVM 
+
+
+class MyThread extends Thread{
+        public void run(){                              // this method run() is overridden method from the Thread Class
+                for(int i = 0;i<10;i++){
+                        System.out.println("In run");
+                }
+        }
+}
+class ThreadDemo{
+        public static void main(String [] args){
+                MyThread obj = new MyThread();          // here we have created the obj of the class MyThread which will call the super in it which leads to the constructor of Thread class and in the Thread class there is a VMCreate method which will create a new thread 
+                obj.start();                            //This start method will start the newly created Thread which is created by the above object ------ and when we start without calling the method the thread will start running
+
+                for(int i = 0;i<10;i++){
+                        System.out.println("In main");
+                }
+        }
+}
+
+// Code 2
+
+class Mythread extends Thread{
+        public void run(){
+                for(int i = 0; i <10;i++){
+                        System.out.println("In run");
+                        try{                                                             // here we have only one option to handle the interrupted Exception because in overriding the method overrided should throw the same exception then only the overridden method can throw the same exception here the method run in Thread class do not throw any exception so we have only try catch as option to handle the exception
+                                Thread.sleep(1000);
+                        }catch(InterruptedException ie){
+
+                        }
+                }
+        }
+}
+class ThreadDemo{
+        public static void main(String [] args)throws InterruptedException{
+                Mythread obj = new Mythread();
+                obj.start();
+
+                for(int i = 0;i<10;i++){
+                        System.out.println("In main ");
+                        Thread.sleep(1000);
+                }
+        }
+}
+
+=============================================
+//do not do this code
+//wrong practice 
+
+class MyThread extends Thread {
+        public void run(){
+                System.out.println("In run");
+                System.out.println(Thread.currentThread().getName());
+
+        }
+        public void start(){                                                    //bcoz of the below reason we dont have to write start method in out class where we definetly have to override the run method otherwise out class will be abstrat class
+                System.out.println("In myThreadStart");
+        }
+}
+class Demo{
+        public static void main(String []a ){
+                MyThread obj = new MyThread();
+                obj.start();                                                    // As we have seen when we call the start method the new thred start but here no new tread start becouse it is calling the start method of MyThread class created by us which will not start the tread thats why the call is not made to the run() method in out mythread class
+
+                System.out.println(Thread.currentThread().getName());
+        }
+}
+
+Output :
+In MYthreadStart
+main
+
+
+================================================
+//Creating Multi Thread 
+// here we have created 3 threads
+
+class Demo extends Thread{
+        public void run(){
+                System.out.println("Demo :" + Thread.currentThread().getName());
+        }
+}
+class Mythread extends Thread{
+        public void run(){
+                System.out.println("Mythread :" + Thread.currentThread().getName());
+
+                Demo obj = new Demo();
+                obj.start();
+        }
+}
+class ThreadDemo{
+        public static void main(String[] args){
+
+                System.out.println("ThreadDemo :" + Thread.currentThread().getName());
+
+                Mythread obj = new Mythread();
+                obj.start();
+        }
+}
+
+Output :
+ThreadDemo :main
+Mythread :Thread-0
+Demo :Thread-1
+
+================================================ 2nd Way to create a new Thread
+
+// Creating a new Thread without extending the thread Class
+// This method can be used when the client wants to make thread in the child class
+// by using Runnable Interface We can create new thread in the child class
+// Thread class is in lang package so no need to import any package
+// Thread has many constructor one of which is Thread(Runnable r)  So we can give parameter of any class which is child of Runnable interface
+// here same out MyThread class is the child of runnable Interface so it can be given to thread constructor as parameter
+
+class MyThread implements Runnable{
+        public void run(){
+                System.out.println("In run");
+                System.out.println(Thread.currentThread().getName());
+        }
+}
+class Demo{
+        public static void main(String [] args){
+
+                MyThread obj = new MyThread();
+                Thread t = new Thread(obj);                             //
+                t.start();
+
+                System.out.println(Thread.currentThread().getName());
+        }
+}
+
+OutPut :
+
+main
+In run
+Thread-0
+
+======================================== Priority  in Thread
+
+class MyThread extends Thread{
+        public void run(){
+                Thread t = Thread.currentThread();
+                System.out.println(t.getPriority());
+        }
+}
+class Demo{
+        public static void main(String [] args){
+                Thread t = Thread.currentThread();
+                System.out.println(t.getPriority());
+
+                MyThread obj = new MyThread();
+                obj.start();
+
+                t.setPriority(7);
+
+                MyThread obj1 = new MyThread();
+                obj1.start();
+        }
+}
+
+Output :
+
+5
+5
+7
+
+================================================ Concurrency methods in Thread
+================================================ Sleep method
+//We also have used setName() method to change the name of the thread
+
+class MyThread extends Thread{
+        public void run(){
+                System.out.println(Thread.currentThread());
+        }
+}
+class ThreadDemo{
+        public static void main(String [] args)throws InterruptedException{
+                System.out.println(Thread.currentThread());
+
+                MyThread t = new MyThread();
+                t.start();
+
+                Thread.sleep(1000);
+                Thread.currentThread().setName("MyThread_Main");
+
+                System.out.println(Thread.currentThread());
+        }
+}
+
+Output 
+Thread[main,5,main]
+Thread[Thread-0,5,main]
+Thread[MyThread_Main,5,main]
+
+===================================================== join method 
+// Join method is used to let other thread do its work before this thread 
+// the join method is called by the object and the thread which is created by that object is run before this thread
+// if we dont give time in the join method then till the other thread complete its work this thread will stay in reay to rn state
+
+class MyThread extends Thread{
+        public void run(){
+                for(int i = 0;i<10;i++){
+                        System.out.println("In Thread - 0");
+                }
+        }
+}
+class ThreadDemo{
+        public static void main(String [] args)throws InterruptedException{
+                MyThread t = new MyThread();
+                t.start();
+
+                t.join();
+
+                for(int i = 0;i<10;i++){
+                        System.out.println("In main");
+                }
+        }
+}
+
+Output
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In Thread - 0
+In main
+In main
+In main
+In main
+In main
+In main
+In main
+In main
+In main
+In main
+
+========================================
+// from this code we get to understand that this code has given dead condition both code are saying each other to complete first so no code will execute
+// so to avoid this condition we have to use join method with some time parameter
+
+class MyThread extends Thread{
+        static Thread nmMain= null;
+        public void run(){
+                try{
+                        nmMain.join();
+                }catch(InterruptedException ie){
+
+                }catch(NullPointerException ne){
+
+                }
+                for(int i = 0;i<10;i++){
+                        System.out.println("In thread 0");
+                }
+        }
+}
+class ThreadDemo{
+        public static void main(String [] args)throws InterruptedException{
+                MyThread.nmMain = Thread.currentThread();
+
+                MyThread obj = new MyThread();
+                obj.start();
+
+                obj.join();
+
+                for(int i = 0;i<10;i++){
+                        System.out.println("In main");
+                }
+        }
+}
+
+=======================================================Yeild method 
+//this is same as join method but before updates this was not native method
+// so calling this was different but now join method and yeild is nearly same
+
+class MyThread extends Thread{
+        public void run(){
+                System.out.println(getName());
+        }
+}
+class ThreadDemo{
+        public static void main(String [] arffs){
+                MyThread t = new MyThread();
+                t.start();
+
+                t.yield();
+
+                System.out.println(Thread.currentThread().getName());
+        }
+}
+
+Output 
+main
+Thread-0
+
+=========================
+//We have changed the name of our thread and also printed the group of the thread
+
+package Norm;
+
+public class ThreadDemo {
+	public static void main(String [] args) {
+		MyThread obj = new MyThread("Name");
+		obj.start();
+	}
+}
+class MyThread extends Thread{
+	MyThread(String str){
+		super(str);
+	}
+	public void run() {
+		System.out.println(getName());
+		System.out.println(Thread.currentThread().getThreadGroup());
+	}
+}
+Output 
+Name
+java.lang.ThreadGroup[name=main,maxpri=10]
+
+========================================
+
+class ThreadDemo{
+        public static void main(String [] ag){
+                ThreadGroup GP = new ThreadGroup("MyGroup");
+
+                MyThread obj1 = new MyThread(GP,"Java");
+                MyThread obj2 = new MyThread(GP,"ReactJS");
+                MyThread obj3 = new MyThread(GP,"SpringBoot");
+
+                obj1.start();
+                obj2.start();
+                obj3.start();
+        }
+}
+class MyThread extends Thread{
+        MyThread(){
+                super();
+        }
+        MyThread(ThreadGroup gp,String str){
+                super(gp,str);
+        }
+        public void run(){
+                System.out.println(Thread.currentThread());
+        }
+}
+
+======================================================================
+
+class MyThread extends Thread{
+
+        MyThread(ThreadGroup tg, String str){
+                super(tg,str);
+        }
+
+        public void run(){
+                System.out.println(Thread.currentThread());
+                try{
+                        Thread.sleep(8000);
+                }
+                catch(InterruptedException ie){
+                        System.out.println(ie.toString());
+                }
+        }
+}
+class ThreadGroupDemo{
+        public static void main(String[] args){
+
+                ThreadGroup pGp = new ThreadGroup("India");
+
+                MyThread obj1 = new MyThread(pGp,"Maha");
+                MyThread obj2 = new MyThread(pGp,"Goa");
+
+                ThreadGroup cGp = new ThreadGroup(pGp,"Pakisthan");
+
+                MyThread obj3 = new MyThread(cGp,"Lahore");
+                MyThread obj4 = new MyThread(cGp,"Karachi");
+
+                ThreadGroup cGp2 = new ThreadGroup(pGp,"Bangladesh");
+
+                MyThread obj5 = new MyThread(cGp2,"Dhaka");
+                MyThread obj6 = new MyThread(cGp2,"Mirpur");
+
+                obj1.start();
+                obj2.start();
+                obj3.start();
+                obj4.start();
+                obj5.start();
+                obj6.start();
+
+                //cGp.interrupt();						// This will interrupt the sleep method and will throw the interrupted exception
+
+                System.out.println(pGp.activeCount());
+                System.out.println(pGp.activeGroupCount());
+
+        }
+}
+
+Output :
+Thread[Maha,5,India]
+Thread[Karachi,5,Pakisthan]
+Thread[Lahore,5,Pakisthan]
+Thread[Goa,5,India]
+Thread[Dhaka,5,Bangladesh]
+6
+2
+Thread[Mirpur,5,Bangladesh]
+
+==================================================================================
+//Using runnable method 
+
+class MyThread implements Runnable{
+        public void run(){
+                System.out.println(Thread.currentThread());
+
+                try{
+                        Thread.sleep(500);
+                }
+                catch(InterruptedException ie){
+                        System.out.println(ie.toString());
+                }
+        }
+}
+class ThreadGroupDemo{
+        public static void main(String[] args){
+                ThreadGroup pGp=new ThreadGroup("India");
+
+                MyThread obj1 = new MyThread();
+                MyThread obj2 = new MyThread();
+
+                Thread t1 = new Thread(pGp,obj1,"Maha");
+                Thread t2 = new Thread(pGp,obj2,"Goa");
+
+                t1.start();
+                t2.start();
+        }
+}
+
+===================================================
+
+import java.util.concurrent.*;
+
+class MyThread implements Runnable{
+        int num;
+        MyThread(int num){
+                this.num=num;
+        }
+        public void run(){
+                System.out.println(Thread.currentThread()+" Start Thread : "+num);
+                dailyTask();
+                System.out.println(Thread.currentThread()+" End Thread : "+num);
+        }
+        void dailyTask(){
+                try{
+                        Thread.sleep(5000);
+                }catch(InterruptedException ie){
+                        System.out.println(ie.toString());
+                }
+        }
+}
+class ThreadPoolDemo{
+        public static void main(String[] a){
+                ExecutorService ser = Executors.newFixedThreadPool(5);
+
+                for(int i = 0;i<10;i++){
+                        MyThread obj = new MyThread(i);
+                        ser.execute(obj);
+                }
+                ser.shutdown();
+        }
+}
+
+Output 
+Thread[pool-1-thread-4,5,main] Start Thread : 3
+Thread[pool-1-thread-5,5,main] Start Thread : 4
+Thread[pool-1-thread-3,5,main] Start Thread : 2
+Thread[pool-1-thread-1,5,main] Start Thread : 0
+Thread[pool-1-thread-2,5,main] Start Thread : 1
+Thread[pool-1-thread-4,5,main] End Thread : 3
+Thread[pool-1-thread-5,5,main] End Thread : 4
+Thread[pool-1-thread-4,5,main] Start Thread : 5
+Thread[pool-1-thread-5,5,main] Start Thread : 6
+Thread[pool-1-thread-2,5,main] End Thread : 1
+Thread[pool-1-thread-1,5,main] End Thread : 0
+Thread[pool-1-thread-3,5,main] End Thread : 2
+Thread[pool-1-thread-1,5,main] Start Thread : 8
+Thread[pool-1-thread-2,5,main] Start Thread : 7
+Thread[pool-1-thread-3,5,main] Start Thread : 9
+Thread[pool-1-thread-4,5,main] End Thread : 5
+Thread[pool-1-thread-5,5,main] End Thread : 6
+Thread[pool-1-thread-1,5,main] End Thread : 8
+Thread[pool-1-thread-2,5,main] End Thread : 7
+Thread[pool-1-thread-3,5,main] End Thread : 9

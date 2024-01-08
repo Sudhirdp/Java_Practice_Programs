@@ -1,0 +1,342 @@
+----------------------------- IOException 
+
+// We can see there is the exception in this code 
+
+import java.io.*;
+
+class Demo{
+        public static void main(String [] args){
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+                int x = Integer.parseInt(br.readLine());
+
+                System.out.println(x);
+        }
+}
+
+//  Output 
+//Compile time exception can be considered as error // Also known as checked Exception
+
+error: unreported exception IOException; must be caught or declared to be thrown
+                int x = Integer.parseInt(br.readLine());
+
+// Solution 1 
+
+import java.io.*;
+
+class Demo{
+        public static void main(String [] args)throws IOException{                              // we have handled the exception by thrown method
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+                int x = Integer.parseInt(br.readLine());
+
+                System.out.println(x);
+        }
+}
+
+------------------------------  Arithmetic Exception 
+
+class Demo{
+
+        public static void main(String [] args){
+
+                System.out.println("Main Start");
+
+                int data = 10/0;
+
+                System.out.println(data);
+
+                System.out.println("End Main");
+
+        }
+}
+
+//Output :: Runtime Exception // also known as Unchecked Exception 
+Main Start                                                                                    // You can see that our code has printed the 1st Line of code as an entry
+Exception in thread "main" java.lang.ArithmeticException: / by zero                           // It has broken when there exception occurs and it also gave the reason for an exception as divided by zero 
+        at Demo.main(Program2.java:7)                                                         // this is the stack where the exception occurred 
+// The sequence of printing the exception is 1st. Tread Name 2nd. Exception name 3. Description 4. Stack trace
+//This exception is not handled by us so it has been handled by Default Exception Handler (DEH) 
+// DEH when handles the exception it breaks the code when the exception occurs means abnormal execution of code occurs
+
+Solution for this ::
+
+// We will use try catch method to handle the exception 
+
+class Demo{
+
+        public static void main(String [] args){
+
+                System.out.println("Main Start");
+                int data = 0;
+                try{                                                                //try method we have to write the risky code 
+                        data = 10/0;
+                        System.out.println(data);
+                }catch(ArithmeticException obj){                                    // here we have to write what should user see if he the code has exception    // here the imprtant this is to crate the object of the exe+ception or parent class's exception as it can be accepted  
+                        System.out.println("Exception occued devide by zero");
+                }
+
+                System.out.println("End Main");
+
+        }
+}
+
+//Output ::
+Main Start
+Exception occued devide by zero                                                // see here exception occured and the code has returned why did it occurred but still print the next line means the code ran till the end thats normal execution handeled by codeer
+End Main
+
+-------------------------------------- NullPointer Exception
+
+class Demo{
+        public static void main(String [] args){
+                Demo obj = new Demo();
+                obj.m1();
+                obj = null;
+                obj.m2();
+                System.out.println("End main");
+        }
+        void m1(){
+                System.out.println("in method m1 ");
+        }
+        void m2(){
+                System.out.println("In method m2");
+        }
+}
+// Output ::
+
+in method m1                                                        // It entered in the main method then called the m1 method by using obj object 
+Exception in thread "main" java.lang.NullPointerException           // but after that te object is made null and then we called the m2 which gave exception that the obj is null and method cannot be called 
+        at Demo.main(Program3.java:6)
+
+// This exception can be handeled as below
+class Demo{
+        public static void main(String [] args){
+                Demo obj = new Demo();
+                obj.m1();
+                obj = null;
+                try{
+                        obj.m1();
+                }catch(NullPointerException obj4){
+                        System.out.println("Exception");
+                }
+
+                System.out.println("End main");
+        }
+        void m1(){
+                System.out.println("in method m1 ");
+        }
+        void m2(){
+                System.out.println("In method m2");
+        }
+}
+
+//Output ::
+in method m1
+Exception
+End main
+
+
+------------------------------------------ two exceptions in one code 
+
+import java.io.*;
+
+class Demo{
+        public static void main(String [] args)throws IOException{
+                BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+                String str = br.readLine();
+
+                System.out.println(str);
+                int data = 0;
+                try{
+                        data = Integer.parseInt(br.readLine());
+                }catch(NumberFormatException obj){
+                        System.out.println("Enter the Digit");
+                        try{
+                                data = Integer.parseInt(br.readLine());
+                        }catch(NumberFormatException obj1){
+                                System.out.println("samjat nhi ka ");
+                        }
+                }
+                System.out.println(data);
+
+        }
+}
+
+//Output 
+prashik
+prashik
+wankhade                                        // in try 1
+Enter the Digit                                // in catch 1 
+wankhade                                        // in try 2
+samjat nhi ka                                  // in catch 2 
+0
+
+------------------------------------- Finnaly-----------
+// in code whatever the exception occurs it will enter into finnaly and we can close all the open connections 
+// which helps code not to break or lose 
+// even if the exception is not known to us by going in to finally the code will break but its safety measure
+
+class Demo{
+        void m1(){
+        }
+        void m2(){
+        }
+        public static void main(String []a ){
+                Demo obj = new Demo();
+                obj.m1();
+
+                obj = null;
+
+                try{
+                        obj.m2();
+                }catch(ArithmeticException obj1){
+                        System.out.println("Exception here");
+                }
+                finally{
+                        System.out.println("Connection colsed");
+                }
+
+                System.out.println("End Main");
+        }
+}
+
+//Output : :
+
+Connection colsed
+Exception in thread "main" java.lang.NullPointerException
+        at Demo.main(Program5.java:15)
+
+
+//---------------------------------------StackOverFlowError
+//
+class StackDemo{
+        static void fun(int x ){
+                fun(++x);
+        }
+        public static void main(String[] args){
+                try{
+                        fun(1);
+                }catch(StackOverflowError obj){
+                        System.out.println("Stack overflow");
+                }
+
+        }
+}
+
+
+//--------------------------- throw
+// we can print the statement that comes when excetion happens 
+// here we caught the exception and printed the same exception statement that is given by jvm 
+
+
+import java.util.*;
+
+class Demo{
+        public static void main(String [] args){
+                Scanner sc = new Scanner(System.in);
+
+                int x = sc.nextInt();
+
+                try{
+                        if(x == 0){
+                                throw new ArithmeticException("dev by zero");
+                        }
+                        System.out.println(10/x);
+                }catch(ArithmeticException ae){
+                        System.out.println("Exection in thread "+Thread.currentThread().getName()+ " ");
+                        ae.printStackTrace();
+                }
+        }
+}
+
+Output
+0
+Exection in thread main
+java.lang.ArithmeticException: dev by zero
+        at Demo.main(Program7.java:13)
+
+// user define exceptions 
+//here we have created two exception classes and ..we have called the exception
+
+import java.util.*;
+
+class DataOverException extends RuntimeException{
+        DataOverException(String str){
+                super(str);
+        }
+}
+class DataUnderException extends RuntimeException{
+        DataUnderException(String str){
+                super(str);
+        }
+}
+class Demo{
+        public static void main(String [] args){
+                int arr[] = new int [5];
+
+                Scanner sc = new Scanner(System.in);
+
+                System.out.println("Enter integer value");
+                System.out.println("Note : 0<Element<100");
+
+                for(int i = 0;i<arr.length;i++){
+                        int data = sc.nextInt();
+                        if(data<0){
+                                throw new DataUnderException("data enter is less than zero : Plz read the note and enter");
+                        }
+                        if(data>100){
+                                throw new DataOverException(" data enter is larger than 100 : plz read note and enter");
+                        }
+                        arr[i] = data;
+                }
+                for(int i = 0; i < arr.length;i++){
+                        System.out.println(arr[i]);
+                }
+        }
+}
+
+Output 
+Enter integer value
+Note : 0<Element<100
+5
+4
+3
+4
+150
+Exception in thread "main" DataOverException:  data enter is larger than 100 : plz read note and enter
+        at Demo.main(Program8.java:28)
+
+//Real-time example 
+
+import java.util.*;
+
+class Less extends RuntimeException{
+        Less(String str){
+                super(str);
+        }
+}
+class Addmission{
+        public static void main(String [] args){
+                Scanner sc = new Scanner(System.in);
+
+                System.out.println("Enter the marks");
+
+                int marks = sc.nextInt();
+                int cutoff = sc.nextInt();
+
+                if(marks<cutoff){
+                        throw new Less("dusr clg bagh bhau aplya marks nusar");
+                }
+                System.out.println("Congratulations you are eligible for this college");
+        }
+}
+
+output
+
+Enter the marks
+89
+90
+Exception in thread "main" Less: dusr clg bagh bhau aplya marks nusar
+        at Addmission.main(Program9.java:18)

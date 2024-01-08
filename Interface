@@ -1,0 +1,257 @@
+//Program 1 
+// Interface has 100% abstraction 
+//object of interface can not be created
+//compiler by default gives public and abstract specifier itself
+//while overriding the method from interface we have to write public access specifier 
+
+
+interface Demo{                                         // Interface is 100% abstraction no method has body
+        void fun();                                     // method without body
+        void gun();                                     // public abstract void gun() by default compiler adds itself before method in interface
+}
+class DemoChild implements Demo{
+        public void fun(){                              // abstract method given body in Child class
+                System.out.println("In fun");
+        }
+        public void gun(){                              // but while giving body to method from interface we have to write public compulsary as if we dont write compiler will consider it as default and it will show error of assigning weaker access specifier
+                System.out.println("In gun");
+        }
+}
+class Client {
+        public static void main(String[] args){
+                Demo obj = new DemoChild();             // object of interface can not be created so we have created object of Child class giving reference of Parent Class
+                obj.fun();
+                obj.gun();
+        }
+}
+
+
+// it supports multi-level inheritance 
+//Program 2
+
+interface Demo{                                         // interface has 2 methods
+        void fun();
+        void gun();
+}
+abstract class DemoChild1 implements Demo{              //it has 2 abstract method coming from parent but 1 method is not given body in DemoChild class fun() so the class is abstract
+        public void gun(){
+                System.out.println("In gun");
+        }
+}
+class DemoChild2 extends DemoChild1{                    //it has 1 abstract method coming from parent nut it has given body to it so it is now 100% non abstract
+
+        public void fun(){
+                System.out.println("In fun");
+        }
+}
+
+class Client {
+        public static void main(String [] a){
+                Demo obj = new DemoChild2();
+                obj.gun();
+                obj.fun();
+        }
+}
+
+//Program 3
+// It supports multiple inheritance which is not supported by class 
+
+interface Demo{
+        void fun();
+}
+interface Demo2{
+        void gun();
+}
+class Child implements Demo,Demo2{                                        // here we have two parent class of Child which is supported by interface but not by class
+        public void fun(){
+                System.out.println("In fun");
+        }
+        public void gun(){
+                System.out.println("in gun");
+        }
+}
+
+//Program 4 
+
+interface Demo1{
+        void fun();
+}
+interface Demo2{
+        void fun();
+}
+class Child implements Demo1,Demo2{
+        public void fun(){
+                System.out.println("in fun");
+        }
+}
+class Client {
+        public static void main(String [] ar){
+                Demo1 obj = new Child();
+                obj.fun();
+
+                Demo2 obj2 = new Child();
+                obj2.fun();
+        }
+}
+
+
+// Program 5
+// we can give body to methods in java from version 1.8
+
+interface Demo1{
+        static void m1(){
+                System.out.println("in Demo1 - m1");
+        }
+}
+interface Demo2{
+        static void m1(){
+                System.out.println("In Demo2 - m1");
+        }
+}
+class DemoChild implements Demo1,Demo2{
+}
+class Client {
+        public static void main(String[] args){
+/*
+                Demo2 obj = new DemoChild();
+                obj.m1();                               //illegal static interface method call
+
+                Demo1 obj1 = new DemoChild();
+                obj1.m1();
+*/
+                Demo1.m1();                             // static method should be called by using name of class only
+
+        }
+}
+
+//Program 6 
+// default can be overridden 
+// static can not be overriden 
+// we have to call static method by class name but to access default we have to create a obj
+interface Demo{
+        static void fun(){
+                System.out.println("In fun Demo");
+        }
+        default void gun(){
+                System.out.println("In gun Demo");
+        }
+}
+class DemoChild implements Demo{
+        public void gun(){                              //default method can be override
+                System.out.println("In gun Child");
+        }
+        public static void fun(){                               // Static method cant be override its a method hiding
+                System.out.println("In fun Child");
+        }
+}
+class Client{
+        public static void main(String [] a){
+                Demo obj = new DemoChild();
+                obj.gun();
+
+                //obj.fun();                            // Error fun cannot be called by obj we have to call it by class name
+                DemoChild.fun();
+                Demo.fun();
+        }
+}
+
+
+// Program 7 
+//multiple inheritance 
+
+interface Demo1{
+        default void fun(){
+                System.out.println("In fun Demo1");
+        }
+}
+interface Demo2{
+        default void fun(){
+                System.out.println("in fun demo2");
+        }
+}
+class DemoChild implements Demo1,Demo2{
+        public void fun(){                                           // if we dont override the mehtod coming from 2 parent class it will show ambiquity error 
+                System.out.println("In fun DemoChild");
+        }
+}
+class Client{
+        public static void main(String [] a){
+                DemoChild obj = new DemoChild();
+                obj.fun();
+
+                Demo1 obj1 = new DemoChild();
+                obj1.fun();
+
+                Demo2 obj2 = new DemoChild();
+                obj2.fun();
+        }
+}
+
+//Program 8
+//static in interface is different from static in class 
+
+interface Demo{
+        static void fun(){
+
+                System.out.println("In fun");
+        }
+}
+class DemoChild implements Demo{
+
+}
+class Client{
+        public static void main(String [] a){
+                DemoChild obj = new DemoChild();
+                obj.fun();                                // error can not find symbol
+
+        }
+}
+
+// if it had been class then there would be no error ..static method is class is comes to the child class by inheritance but not in interface 
+
+//Program 9 
+// variables in Interface 
+
+interface Demo {
+        int x = 10;                                        // internally it goes like ===== // public static final int x ;
+        void fun();                                        // internally it goes like ===== // public abstract void fun();
+}
+class DemoChild implements Demo{
+        public void fun(){
+                System.out.println(x);                      // here the x is inherited from the parent class
+                System.out.println(Demo.x);                 // here it is access the x in demo class       
+        }
+}
+class Client {
+        public static void main(String[] args){
+                Demo obj = new DemoChild();
+                obj.fun();
+        }
+}
+
+// Program 10
+
+interface A{
+        int x = 10;
+}
+interface B{
+        int x = 20;
+}
+interface C{
+        int x = 30;
+}
+class Z implements A,B,C{
+        int x = 100;
+        void fun(){
+                System.out.println(x);                // 100
+                System.out.println(A.x);              // 10
+                System.out.println(B.x);              // 20
+                System.out.println(C.x);              // 30
+        }
+}
+class Client {
+        public static void main(String [] a){
+                Z obj = new Z();
+                obj.fun();
+        }
+}
